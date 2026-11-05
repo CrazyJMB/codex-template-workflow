@@ -1,0 +1,28 @@
+changelog:
+  exclude:
+    labels:
+      - type:sync
+  categories:
+    - title: Breaking changes
+      labels:
+        - breaking
+    - title: Features
+      labels:
+        - type:feature
+    - title: Fixes
+      labels:
+        - type:fix
+        - type:hotfix
+    - title: Performance
+      labels:
+        - type:perf
+    - title: Maintenance
+      labels:
+        - type:refactor
+        - type:docs
+        - type:chore
+        - type:test
+        - type:ci
+    - title: Other changes
+      labels:
+        - '*'

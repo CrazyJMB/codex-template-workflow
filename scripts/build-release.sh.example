@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Optional per-project build hook. Rename to scripts/build-release.sh and customize.
+set -euo pipefail
+version="${1:?}"
+out_dir="${2:?}"
+# Example for a Vite app:
+# npm ci
+# npm run build
+# (cd dist-web && zip -qr "$out_dir/web-$version.zip" .)
+echo "No project-specific binaries configured for $version."
