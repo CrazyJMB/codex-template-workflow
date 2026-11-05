@@ -1,0 +1,28 @@
+# Local environment files; keep documented examples.
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Dependencies, caches, and generated outputs.
+node_modules/
+vendor/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+build/
+coverage/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Editor and operating-system files.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

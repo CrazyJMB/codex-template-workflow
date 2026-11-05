@@ -3,19 +3,25 @@
 
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
 
 def extract(changelog: str, tag: str) -> str:
+    if not re.fullmatch(r"v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)", tag):
+        raise ValueError("Expected release tag vX.Y.Z")
     version = tag.removeprefix("v")
     pattern = rf"(?m)^## \[{re.escape(version)}\] - (\d{{4}}-\d{{2}}-\d{{2}})\s*$"
     match = re.search(pattern, changelog)
     if match is None:
         raise ValueError(f"Missing CHANGELOG.md section for {version}")
+    date.fromisoformat(match.group(1))
     following = re.search(r"(?m)^## \[", changelog[match.end():])
     end = match.end() + following.start() if following else len(changelog)
     body = changelog[match.end():end].strip()
-    if not body:
+    content = re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL)
+    content = re.sub(r"(?m)^\s*(?:#+\s.*|\[[^\]]+\]:.*)$", "", content).strip()
+    if not content:
         raise ValueError(f"Empty release notes for {version}")
     return f"# {tag} ({match.group(1)})\n\n{body}\n"
 

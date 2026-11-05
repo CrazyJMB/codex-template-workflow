@@ -1,18 +1,31 @@
 name: PR policy
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [develop, main]
     types: [opened, reopened, synchronize, edited, labeled, unlabeled, ready_for_review]
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: pr-policy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   policy:
     name: policy
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
+      # Execute only trusted policy code from the target branch, never PR code.
       - uses: actions/checkout@v4
-      - name: Validate branch, title and label
-        run: bash scripts/pr-policy.sh "$GITHUB_EVENT_PATH"
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - name: Apply labels and validate current PR metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/pr-policy.py "$GITHUB_EVENT_PATH" --apply-labels
